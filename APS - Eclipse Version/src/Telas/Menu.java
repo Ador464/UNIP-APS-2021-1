@@ -1,50 +1,16 @@
 package Telas;
 
-import Telas.*;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.swing.table.TableModel;
-
 import Models.*;
 
+@SuppressWarnings("serial")
 public class Menu extends javax.swing.JFrame {
 	
-	private ReadCSV csv_alunos = new ReadCSV("Alunos.csv");
-	private ReadCSV csv_cursos = new ReadCSV("Cursos.csv");
-
-	public List<Object[]> AlunosTable = new ArrayList<Object[]>();
-	public List<Object[]> CursosTable = new ArrayList<Object[]>();
+	private DataCSV csv = new DataCSV();
 	
     public Menu() {
-    	initCSV();
     	initComponents();
     }
     
-    private void initCSV(){
-    	for(Object[] i : csv_alunos.getDataframe(null)) {
-    		AlunosTable.add(i);
-    	}
-    	for(Object[] i : csv_cursos.getDataframe(null)) {
-    		CursosTable.add(i);
-    	}
-    }
-    
-    private void saveAll() {
-    	AlunosTable.add(new Object[] {4, "Fabrício"});
-    	csv_alunos.setDataframe(ReadCSV.toObject(AlunosTable));
-    	csv_cursos.setDataframe(ReadCSV.toObject(CursosTable));
-    	csv_alunos.save();
-    	csv_cursos.save();
-    }
-    
-    public void addAluno(Object[] novoAluno) {
-    	this.AlunosTable.add(novoAluno);
-    }
-
-    @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -163,8 +129,15 @@ public class Menu extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void CadastroAlunoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CadastroAlunoActionPerformed
-    	new CadastroAluno().setVisible(true);
+    	CadastroAluno ca = new CadastroAluno();
+    	ca.setVisible(true);
       
+    	ca.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosed(java.awt.event.WindowEvent windowEvent) {
+          	  csv.reload();
+            }
+        });
     }//GEN-LAST:event_CadastroAlunoActionPerformed
 
     private void jMenu3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu3ActionPerformed
@@ -172,23 +145,35 @@ public class Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenu3ActionPerformed
 
     private void CadastroCursoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CadastroCursoActionPerformed
-          new CadastroCurso().setVisible(true);
-    }//GEN-LAST:event_CadastroCursoActionPerformed
+          CadastroCurso cd = new CadastroCurso();
+          cd.setVisible(true);
+          
+          cd.addWindowListener(new java.awt.event.WindowAdapter() {
+              @Override
+              public void windowClosed(java.awt.event.WindowEvent windowEvent) {
+            	  csv.reload();
+              }
+          });
 
+          
+    }//GEN-LAST:event_CadastroCursoActionPerformed
+    
     private void CadastroRendimentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CadastroRendimentoActionPerformed
         new CadastroRendimento().setVisible(true);
     }//GEN-LAST:event_CadastroRendimentoActionPerformed
 
     private void FecharActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FecharActionPerformed
-        System.exit(0);
+    	this.csv.reload();
+    	this.csv.saveAll();
+    	System.exit(0);
     }//GEN-LAST:event_FecharActionPerformed
 
-    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
-         new ListagemCursos(ReadCSV.toObject(CursosTable)).setVisible(true);
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed 
+    	new ListagemCursos(csv.getCursosTable()).setVisible(true);
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
-    	new ListagemAlunos(ReadCSV.toObject(AlunosTable)).setVisible(true);
+    	new ListagemAlunos(csv.getAlunosTable()).setVisible(true);
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 
     private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed

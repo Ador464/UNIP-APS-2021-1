@@ -9,8 +9,8 @@ import java.io.IOException;  // Import the IOException class to handle errors
 
 
 public class ReadCSV {
-    
-    private List<Object[]> dataframe = new ArrayList<Object[]>();
+	
+	private List<Object[]> dataframe = new ArrayList<Object[]>();
     private String path = System.getProperty("user.dir");
     private String[] header;
     
@@ -49,13 +49,15 @@ public class ReadCSV {
 	            scanner.close();
 	        } catch(java.io.FileNotFoundException e2) {
 	            e2.printStackTrace();        
-	        }    
+	        } catch(java.util.NoSuchElementException e2) {
+	        	this.header = new String[] {"RA","NP1","NP2","Sub","Exame"};
+	        }
         }
     }
     
     /**
      * Recebe uma List de vetores de Objetos e retorna ela em um Array Bidimensional de Objetos
-     * @param con List que ser� convertida
+     * @param con List que será convertida
      * @return a Array Bidimensional de Objetos que foi convertida da List
      */
     public static Object[][] toObject(List<Object[]> con){
@@ -76,24 +78,69 @@ public class ReadCSV {
     }
     
     /**
-     * Retorna o cabe�alho do CSV, das colunas especificadas
+     * Recebe um objeto e retorna ele em forma de Integer, ou retorna null caso impossível
+     * @param con objeto que será convertida
+     * @return a Integer ou null
+     */
+    public static Integer toInt(Object con) {
+    	try {
+    		Integer res = Integer.valueOf(con.toString());
+        	return res;
+    	} catch(java.lang.NumberFormatException e) {
+    		return null;
+    	}
+    }
+    
+    /**
+     * Recebe uma string e retorna ela de volta, porem sem acentos ou cedilhas.
+     * @param text texto que será refinado
+     * @return a entrada porem sem a maioria dos caracteres especiais
+     */
+    public static String refineString(String text) {
+    	String res;
+    	
+    	res = text;
+    	res = res.toLowerCase();
+    	res = res.replace("ç", "c");
+    	res = res.replace("ã", "a");
+    	res = res.replace("á", "a");
+    	res = res.replace("à", "a");
+    	res = res.replace("â", "a");
+    	res = res.replace("ú", "u");
+    	res = res.replace("ô", "o");
+    	res = res.replace("ó", "o");
+    	res = res.replace("é", "e");
+    	res = res.replace("è", "e");
+    	res = res.replace("ê", "e");
+    	res = res.replace("í", "i");
+    	res = res.replace("ì", "i");
+    	
+    	return res;
+    }
+    
+    /**
+     * Retorna o cabeçalho do CSV, das colunas especificadas
      * @param index o index da colunas a serem devolvidos 
      * @return Array de Objetos contendo o cabe�alho do csv
      */   
-    public String[] getHeader(int[] index){
-        String[] res = new String[index.length];
-        
-        int count = -1;
-        for(int i : index){
-            count++;
-            res[count] = this.header[i];
-        }
-        return res;
+    public String[] getHeader(Integer[] index){
+    	if (index != null) {
+	        String[] res = new String[index.length];
+	        
+	        int count = -1;
+	        for(int i : index){
+	            count++;
+	            res[count] = this.header[i];
+	        }
+	        return res;
+    	} else {
+    		return this.header;
+    	}
     }
 
     /**
-     * Substitui o cabe�alho antigo por um novo
-     * @param header novo cabe�alho que substituir� o antigo 
+     * Substitui o cabeçalho antigo por um novo
+     * @param header novo cabeçalho que substituir� o antigo 
      */   
     public void setHeader(String[] header){
         this.header = header;
@@ -120,7 +167,7 @@ public class ReadCSV {
     	}
     	return null;
     }
-    
+
     /**
      * Susbtitui a tabela de dados antiga por uma nova
      * @param dataframe a nova tabela de dados que substituir� a antiga
@@ -128,14 +175,15 @@ public class ReadCSV {
      */
     public void setDataframe(Object[][] dataframe){
     	this.dataframe.clear();
-    	for(Object[] ln : dataframe) {
-    		this.dataframe.add(ln);
+    	if(dataframe != null) {
+	    	for(Object[] ln : dataframe) {
+	    		this.dataframe.add(ln);
+	    	}
     	}
-    	
     }
     
     /**
-     * Altera um unico dado de uma posi��o espec�fica para um valor recebido
+     * Altera um unico dado de uma posição específica para um valor recebido
      * @param column coluna em que o dado deve ser inserido
      * @param line linha em que o dado deve ser inserido
      * @param data dado que dever ser colocado no dataframe
@@ -153,7 +201,6 @@ public class ReadCSV {
     	FileWriter table;
 		try {
 			table = new FileWriter(this.path);
-			System.out.println(this.dataframe.size());
         	String line = "";
         	for(Object k : this.header) {
         		line += k;
@@ -174,10 +221,7 @@ public class ReadCSV {
 			e.printStackTrace();
 		} catch (java.lang.NullPointerException e) {
 			this.header = new String[1];
-			this.header[0] = "Nada";
-			Object[] i = new Object[1];
-			i = this.header;
-			this.dataframe.add(i);
+			this.header = new String[] {"RA","NP1","NP2","Sub","Exame"};
 			this.save();
 		}
     	

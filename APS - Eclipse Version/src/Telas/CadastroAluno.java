@@ -1,20 +1,19 @@
 package Telas;
 
-import Models.AlunoModel;
-import java.util.ArrayList;
-import java.util.List;
+import Models.DataCSV;
+
 import javax.swing.JOptionPane;
 
+@SuppressWarnings("serial")
 public class CadastroAluno extends javax.swing.JFrame {
-
-	public List<Object[]> alunos = new ArrayList<Object[]>();
-	public boolean f = false;		
+	
+	private DataCSV csv = new DataCSV();
 	
 	public CadastroAluno() {
         initComponents();
     }
 
-    @SuppressWarnings("unchecked")
+    
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -37,7 +36,6 @@ public class CadastroAluno extends javax.swing.JFrame {
         BtnSair.setText("Sair");
         BtnSair.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-            	f = true;
                 BtnSairActionPerformed(evt);
             }
         });
@@ -103,16 +101,19 @@ public class CadastroAluno extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void BtnSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnSairActionPerformed
-          dispose();
+    	csv.saveAll();
+    	this.dispose();
     }
     
     private void BtnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnSalvarActionPerformed
-       JOptionPane.showMessageDialog(null, txtNome.getText() + " cadastrado com Sucesso!");
-       alunos.add(new Object[] {txtID.getText(),txtNome.getText()});
-       txtNome.setText("");
-       txtID.setText("");
-        
-    }//GEN-LAST:event_BtnSalvarActionPerformed
+        csv.addAluno(txtID.getText(), txtNome.getText());
+        csv.saveAll();
+        csv.reload();
+        JOptionPane.showMessageDialog(null, txtNome.getText() + " cadastrado com Sucesso!");
+        txtNome.setText("");
+        txtID.setText("");
+         
+     }//GEN-LAST:event_BtnSalvarActionPerformed
 
     /**
      * @param args the command line arguments

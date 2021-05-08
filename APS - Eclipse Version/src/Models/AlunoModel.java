@@ -6,12 +6,10 @@ package Models;
  * and open the template in the editor.
  */
 
-import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -52,7 +50,7 @@ public class AlunoModel {
     public String salvar() {
         
         try {
-        FileWriter fw = new FileWriter("C:\\Users\\Alves\\OneDrive\\Área de Trabalho\\01\\aluno.csv",true);
+        FileWriter fw = new FileWriter("C:\\Users\\Alves\\OneDrive\\ï¿½rea de Trabalho\\01\\aluno.csv",true);
         PrintWriter pw = new PrintWriter(fw);
         pw.println("ID: " + this.id + " , " + "Nome: " + this.nome);
         pw.flush();
@@ -71,7 +69,7 @@ public class AlunoModel {
         String dadosAlunos = ""; 
         
         try{
-          Scanner in = new Scanner(new FileReader("C:\\Users\\Alves\\OneDrive\\Área de Trabalho\\01\\aluno.csv"));
+          Scanner in = new Scanner(new FileReader("C:\\Users\\Alves\\OneDrive\\ï¿½rea de Trabalho\\01\\aluno.csv"));
             while (in.hasNextLine()) {
                 dadosAlunos += in.nextLine()+"\n";
             }
