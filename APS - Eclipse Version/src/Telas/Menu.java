@@ -126,18 +126,23 @@ public class Menu extends javax.swing.JFrame {
 
         pack();
         setLocationRelativeTo(null);
-    }// </editor-fold>//GEN-END:initComponents
+    }// </editor-fold>                        
 
     private void CadastroAlunoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CadastroAlunoActionPerformed
     	CadastroAluno ca = new CadastroAluno();
+        this.dispose();
     	ca.setVisible(true);
-      
+        
     	ca.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosed(java.awt.event.WindowEvent windowEvent) {
-          	  csv.reload();
+          	csv.reload();
+                Menu.this.setVisible(true);
             }
+        
         });
+        
+                
     }//GEN-LAST:event_CadastroAlunoActionPerformed
 
     private void jMenu3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu3ActionPerformed
@@ -146,20 +151,33 @@ public class Menu extends javax.swing.JFrame {
 
     private void CadastroCursoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CadastroCursoActionPerformed
           CadastroCurso cd = new CadastroCurso();
+          this.dispose();
           cd.setVisible(true);
+          
           
           cd.addWindowListener(new java.awt.event.WindowAdapter() {
               @Override
               public void windowClosed(java.awt.event.WindowEvent windowEvent) {
             	  csv.reload();
+                  Menu.this.setVisible(true);
               }
           });
+          
 
           
     }//GEN-LAST:event_CadastroCursoActionPerformed
     
     private void CadastroRendimentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CadastroRendimentoActionPerformed
-        new CadastroRendimento().setVisible(true);
+        this.dispose();
+        CadastroRendimento cr = new CadastroRendimento();
+        cr.setVisible(true);
+        cr.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosed(java.awt.event.WindowEvent windowEvent) {  
+                Menu.this.setVisible(true);
+            }
+        });        
+        
     }//GEN-LAST:event_CadastroRendimentoActionPerformed
 
     private void FecharActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FecharActionPerformed
@@ -168,20 +186,57 @@ public class Menu extends javax.swing.JFrame {
     	System.exit(0);
     }//GEN-LAST:event_FecharActionPerformed
 
-    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed 
-    	new ListagemCursos(csv.getCursosTable()).setVisible(true);
-    }//GEN-LAST:event_jMenuItem4ActionPerformed
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {
+        this.dispose();
+    	ListagemCursos lc = new ListagemCursos(csv.getCursosTable());
+        lc.setVisible(true);
+        
+        
+        lc.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosed(java.awt.event.WindowEvent windowEvent) {
+                Menu.this.setVisible(true);
+            }
+        });               
+        
+    }                                          
 
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
-    	new ListagemAlunos(csv.getAlunosTable()).setVisible(true);
+    	this.dispose();
+        ListagemAlunos la = new ListagemAlunos(csv.getAlunosTable());
+        la.setVisible(true);
+        
+        la.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosed(java.awt.event.WindowEvent windowEvent) {
+                Menu.this.setVisible(true);
+            }
+        });    
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 
     private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
-      new ListagemHistorico().setVisible(true);
+        this.dispose();
+        ListagemHistorico lh = new ListagemHistorico();
+        lh.setVisible(true);
+        
+        lh.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosed(java.awt.event.WindowEvent windowEvent) {
+                Menu.this.setVisible(true);
+            }
+        });   
     }//GEN-LAST:event_jMenuItem6ActionPerformed
 
     private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
-          new ListagemRendimento().setVisible(true);
+        this.dispose();
+        ListagemRendimento lr = new ListagemRendimento();
+        lr.setVisible(true);
+        lr.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosed(java.awt.event.WindowEvent windowEvent) {
+                Menu.this.setVisible(true);
+            }
+        });          
     }//GEN-LAST:event_jMenuItem7ActionPerformed
 
     /**

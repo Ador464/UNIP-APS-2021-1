@@ -33,7 +33,7 @@ public class CadastroAluno extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Tahoma", 2, 36)); // NOI18N
         jLabel3.setText("Cadastro de Aluno");
 
-        BtnSair.setText("Sair");
+        BtnSair.setText("Voltar");
         BtnSair.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BtnSairActionPerformed(evt);

@@ -5,7 +5,6 @@
 
 		• Handling de error de todas as páginas (textBox, comboBox, checkBox, TUDO...).
 		• Impedir o usuário de adicionar alunos, cursos ou rendimentos iguais.
-		• Modificar os .visible para  apenas uma janela aparecer na tela ao mesmo tempo.
 		• Criar uma opção para apagar cursos, alunos e rendimentos.
 		• Corrigir e aplicar todas as EXIT_ON_CLOSE com finalização e estabilidade (Se vc não for eu, ignore essa linha!!!)
 		
@@ -16,7 +15,6 @@
 		• Code Scrap Clear.
 		• Variable Scrap Clear.
 		• Otimizar memória.
-		• Trocar os botões de "Sair" por "Voltar".
 		
 		
 	OPCIONAL, MAS BOM:
