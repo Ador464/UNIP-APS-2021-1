@@ -10,6 +10,7 @@ import java.io.IOException;  // Import the IOException class to handle errors
 
 public class ReadCSV {
 	
+	private String fileName;
 	private List<Object[]> dataframe = new ArrayList<Object[]>();
     private String path = System.getProperty("user.dir");
     private String[] header;
@@ -20,6 +21,7 @@ public class ReadCSV {
      */
     public ReadCSV(String nome) {
         
+    	this.fileName = nome;
         this.path += "\\" + nome; // caminho do arquivo a partir da raiz
         
         if(!this.createNewCSV()) {        
@@ -50,7 +52,13 @@ public class ReadCSV {
 	        } catch(java.io.FileNotFoundException e2) {
 	            e2.printStackTrace();        
 	        } catch(java.util.NoSuchElementException e2) {
-	        	this.header = new String[] {"RA","NP1","NP2","Sub","Exame"};
+	        	if(this.fileName == "Alunos.csv") {
+	        		this.header = new String[] {"ID","Nome"};
+	        	} else if (this.fileName == "Cursos.csv") {
+	        		this.header = new String[] {"Nome","Tipo","Ano"};
+	        	} else {
+	        		this.header = new String[] {"RA","NP1","NP2","Sub","Exame"};
+	        	}
 	        }
         }
     }
@@ -220,8 +228,13 @@ public class ReadCSV {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (java.lang.NullPointerException e) {
-			this.header = new String[1];
-			this.header = new String[] {"RA","NP1","NP2","Sub","Exame"};
+			if(this.fileName == "Alunos.csv") {
+        		this.header = new String[] {"ID","Nome"};
+        	} else if (this.fileName == "Cursos.csv") {
+        		this.header = new String[] {"Nome","Tipo","Ano"};
+        	} else {
+        		this.header = new String[] {"RA","NP1","NP2","Sub","Exame"};
+        	}
 			this.save();
 		}
     	

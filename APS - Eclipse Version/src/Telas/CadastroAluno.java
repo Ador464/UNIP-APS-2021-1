@@ -106,13 +106,28 @@ public class CadastroAluno extends javax.swing.JFrame {
     }
     
     private void BtnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnSalvarActionPerformed
-        csv.addAluno(txtID.getText(), txtNome.getText());
-        csv.saveAll();
-        csv.reload();
-        JOptionPane.showMessageDialog(null, txtNome.getText() + " cadastrado com Sucesso!");
-        txtNome.setText("");
-        txtID.setText("");
-         
+    	try {
+        	if(txtID.getText().equals("") || txtNome.getText().equals("")) {
+        		throw new Exception("Por favor preencha todos os campos!");
+        	} else {
+	        	try {
+	        		int tmp_int_id = Integer.parseInt(txtID.getText());
+	        		if(tmp_int_id < 0) {
+	        			throw new Exception("ID inválido (o ID não pode ser negativo!)");
+	        		}
+	        	} catch (java.lang.NumberFormatException e) {
+	        		throw new Exception("ID inválido (tente usar um número inteiro!)");
+	        	}
+        	}
+			csv.addAluno(txtID.getText(), txtNome.getText());
+	        csv.saveAll();
+	        csv.reload();
+	        JOptionPane.showMessageDialog(null, txtNome.getText() + " cadastrado com Sucesso!");
+	        txtNome.setText("");
+	        txtID.setText("");
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, e.getMessage());
+		}        
      }//GEN-LAST:event_BtnSalvarActionPerformed
 
     /**

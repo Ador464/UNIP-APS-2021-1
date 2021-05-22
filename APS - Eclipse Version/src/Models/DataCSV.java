@@ -18,18 +18,22 @@ public class DataCSV {
     }
 	
 	public void loadCSV(){
-    	for(Object[] i : csv_alunos.getDataframe(null)) {
-    		this.AlunosTable.add(i);
-    	}
-    	for(Object[] i : csv_cursos.getDataframe(null)) {
-    		this.CursosTable.add(i);
-    	}
-    	for(Object[] i : CursosTable) {
-    		String nta = i[0].toString() + "_" + i[1].toString() + "_" + i[2].toString(); // nta = nome_tipo_ano
-    		nta = nta.replace(" ", "");
-    	    nta = ReadCSV.refineString(nta);
-    	    this.csv_modal.add(new ReadCSV(nta + ".csv"));
-    	}
+		if(csv_alunos.getDataframe(null)!=null) {
+	    	for(Object[] i : csv_alunos.getDataframe(null)) {
+	    		this.AlunosTable.add(i);
+	    	}
+		}
+		if(csv_cursos.getDataframe(null)!=null) {
+	    	for(Object[] i : csv_cursos.getDataframe(null)) {
+	    		this.CursosTable.add(i);
+	    	}
+	    	for(Object[] i : CursosTable) {
+	    		String nta = i[0].toString() + "_" + i[1].toString() + "_" + i[2].toString(); // nta = nome_tipo_ano
+	    		nta = nta.replace(" ", "");
+	    	    nta = ReadCSV.refineString(nta);
+	    	    this.csv_modal.add(new ReadCSV(nta + ".csv"));
+	    	}
+		}
     	for(ReadCSV csv : csv_modal) {
     		List<Object[]> tmp = new ArrayList<Object[]>();
     		if(csv.getDataframe(null) != null) {
@@ -75,6 +79,7 @@ public class DataCSV {
     		res[i++] = r;
     	}
     	return res;
+    	
     }
     
     public Object[][] getAlunosTable(){
@@ -108,6 +113,14 @@ public class DataCSV {
     	return res;
     }
     
+    public String[] getIdAlunos() {
+    	String[] res = new String[this.AlunosTable.size()];
+    	for(int i = 0; i < this.AlunosTable.size(); i++) {
+    		res[i] = this.AlunosTable.get(i)[0].toString();
+    	}
+    	return res;
+    }
+    
     public String getAlunoByRA(Integer ra) {
     	String res = null;
     	for(int i = 0; i < this.AlunosTable.size(); i++) {
@@ -118,18 +131,52 @@ public class DataCSV {
     	return res;
     }
     
-    public void addCurso(Object name, Object tipo, Object ano) {
+    public void addCurso(Object name, Object tipo, Object ano) throws Exception {
+    	Object[][] cursosExistentes = this.getCursosTable();
     	Object[] novocurso = new Object[] {name, tipo, ano};
+    	
+    	if(cursosExistentes!=null) {
+	    	for (Object[] curso: cursosExistentes) { 
+	    		if(curso[0].toString().equals(novocurso[0]) &&
+				   curso[1].toString().equals(novocurso[1]) &&
+				   curso[2].toString().equals(novocurso[2]) ) {
+					throw new Exception("Já existe um curso cadastrado com essas características!");
+				}
+			}
+    	}
+    	
     	this.CursosTable.add(novocurso);
     }
     
-    public void addAluno(Object id, Object nome) {
+    public void addAluno(Object id, Object nome) throws Exception {
+    	
+    	String[] idsExistentes = this.getIdAlunos();
+    	if(idsExistentes!=null) {
+	    	for (String idAluno : idsExistentes) {    		
+	    		
+				if(idAluno.contains(id.toString())) {
+					throw new Exception("Este ID ja foi cadastrado!");
+				}
+			}
+    	}
+    	
     	Object[] novoaluno = new Object[] {id, nome};
     	this.AlunosTable.add(novoaluno);
     }
 
-    public void addRendimento(int aluno_index, int curso_index, Object np1, Object np2, Object sub, Object exame) {
+    public void addRendimento(int aluno_index, int curso_index, Object np1, Object np2, Object sub, Object exame) throws Exception {
+    	
     	Integer ra = Integer.valueOf(this.AlunosTable.get(aluno_index)[0].toString());
+    	
+    	if(this.getModalByIndex(curso_index)!=null) {
+	    	for (Object[] itemColunaRa : this.getModalByIndex(curso_index)) {
+	    		
+	    		if(ra.compareTo((Integer) itemColunaRa[0]) == 0) {
+	    			throw new Exception("Este aluno ja possui rendimento cadastrado!");
+	    		}
+			}
+    	}
+    	
     	this.ModalTable.get(curso_index).add(new Object[] {ra, np1, np2, sub, exame});
     }
 }
