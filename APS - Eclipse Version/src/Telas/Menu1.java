@@ -181,12 +181,13 @@ public class Menu1 extends javax.swing.JFrame {
      
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
         this.dispose();
-        ListagemAlunos la = new ListagemAlunos(csv.getAlunosTable());
+        ListagemAlunos la = new ListagemAlunos();
         la.setVisible(true);
         
         la.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosed(java.awt.event.WindowEvent windowEvent) {
+            	csv.reload();
                 Menu1.this.setVisible(true);
             }
         });
@@ -194,13 +195,14 @@ public class Menu1 extends javax.swing.JFrame {
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
         this.dispose();
-    	ListagemCursos lc = new ListagemCursos(csv.getCursosTable());
+    	ListagemCursos lc = new ListagemCursos();
         lc.setVisible(true);
         
         
         lc.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosed(java.awt.event.WindowEvent windowEvent) {
+            	csv.reload();
                 Menu1.this.setVisible(true);
             }
         });               
@@ -216,6 +218,7 @@ public class Menu1 extends javax.swing.JFrame {
 	        lh.addWindowListener(new java.awt.event.WindowAdapter() {
 	            @Override
 	            public void windowClosed(java.awt.event.WindowEvent windowEvent) {
+	            	csv.reload();
 	            	Menu1.this.setVisible(true);
 	            }
 	        });  
@@ -236,6 +239,7 @@ public class Menu1 extends javax.swing.JFrame {
 	        lr.addWindowListener(new java.awt.event.WindowAdapter() {
 	            @Override
 	            public void windowClosed(java.awt.event.WindowEvent windowEvent) {
+	            	csv.reload();
 	                Menu1.this.setVisible(true);
 	            }
 	        });  
@@ -252,6 +256,7 @@ public class Menu1 extends javax.swing.JFrame {
         cr.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosed(java.awt.event.WindowEvent windowEvent) {  
+            	csv.reload();
                 Menu1.this.setVisible(true);
             }
         });      

@@ -258,5 +258,19 @@ public class ReadCSV {
 		return res;
     }
     
+    /**
+     * Getter de FileName
+     * @return O nome do arquivo csv que essa classe está acessando
+     */
+    public String getFileName() {
+    	return this.fileName;
+    }
     
+    /**
+     * Apaga o arquivo CSV
+     */
+    public void deleteCSV() {
+    	File file = new File(path);
+    	file.delete();
+    }
 }

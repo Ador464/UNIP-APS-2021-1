@@ -5,12 +5,18 @@
  */
 package Telas;
 
+import javax.swing.JOptionPane;
+
+import Models.DataCSV;
+
 /**
  *
  * @author camil
  */
 @SuppressWarnings("serial")
 public class ListagemCursos extends javax.swing.JFrame {
+	
+	private DataCSV csv = new DataCSV();
 
     /**
 	 * 
@@ -18,8 +24,8 @@ public class ListagemCursos extends javax.swing.JFrame {
 	/**
      * Creates new form ListagemCursos
      */
-    public ListagemCursos(Object[][] i) {
-        initComponents(i);
+    public ListagemCursos() {
+        initComponents();
     }
 
     /**
@@ -29,27 +35,31 @@ public class ListagemCursos extends javax.swing.JFrame {
      */
 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents(Object[][] i) {
+    private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         BtnSair = new javax.swing.JButton();
+        BtnDelete = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            i,
-            new String [] {
-                "Nome", "Nível", "Ano"
-            }
-        ));
+        reloadTable();
+        
         jScrollPane1.setViewportView(jTable1);
 
         BtnSair.setText("Voltar");
         BtnSair.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BtnSairActionPerformed(evt);
+            }
+        });
+        
+        BtnDelete.setText("Excluir Curso");
+        BtnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnDeleteActionPerformed(evt, jTable1.getSelectedRow());
             }
         });
 
@@ -63,17 +73,20 @@ public class ListagemCursos extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(BtnSair, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(BtnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(BtnSair, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addContainerGap()
+                            .addGap(15))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(18, 18, 18)
+                                .addGap(18)
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 367, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(39, 39, 39)
+                                .addGap(39)
                                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 315, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 5, Short.MAX_VALUE)))
+                        .addGap(0, 15, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -83,8 +96,10 @@ public class ListagemCursos extends javax.swing.JFrame {
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
-                .addComponent(BtnSair, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18)
+                .addGroup(layout.createParallelGroup()
+                	.addComponent(BtnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                	.addComponent(BtnSair, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -95,7 +110,26 @@ public class ListagemCursos extends javax.swing.JFrame {
     private void BtnSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnSairActionPerformed
         dispose();
     }//GEN-LAST:event_BtnSairActionPerformed
+    
+    private void BtnDeleteActionPerformed(java.awt.event.ActionEvent evt, int idx) {//GEN-FIRST:event_BtnSairActionPerformed
+    	try {
+    		String cd = csv.deleteCurso(idx);
+    		reloadTable();
+    		JOptionPane.showMessageDialog(null, cd + " deletado com sucesso!");
+    	} catch (java.lang.ArrayIndexOutOfBoundsException e) {
+    		JOptionPane.showMessageDialog(null, "selecione um curso para deletá-lo");
+    	}
+    }//GEN-LAST:event_BtnSairActionPerformed
 
+    private void reloadTable() {
+    	jTable1.setModel(new javax.swing.table.DefaultTableModel(
+                csv.getCursosTable(),
+                new String [] {
+                    "Nome", "Nível", "Ano"
+                }
+        ));
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -126,7 +160,7 @@ public class ListagemCursos extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ListagemCursos(new Object[][]{}).setVisible(true);
+                new ListagemCursos().setVisible(true);
             }
         });
     }
@@ -136,5 +170,6 @@ public class ListagemCursos extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
+    private javax.swing.JButton BtnDelete;
     // End of variables declaration//GEN-END:variables
 }

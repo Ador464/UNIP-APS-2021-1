@@ -5,6 +5,8 @@
  */
 package Telas;
 
+import javax.swing.JOptionPane;
+
 import Models.DataCSV;
 
 /**
@@ -39,6 +41,7 @@ public class ListagemRendimento extends javax.swing.JFrame {
         BtnSair = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        BtnDelete = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -59,31 +62,23 @@ public class ListagemRendimento extends javax.swing.JFrame {
             }
         });
         
+        BtnDelete.setText("Excluir Rendimento");
+        BtnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnDeleteActionPerformed(evt, jComboBox1.getSelectedIndex(),jTable1.getSelectedRow());
+            }
+        });
+        
         
         
         jComboBox1.addActionListener(new java.awt.event.ActionListener() {
         	public void actionPerformed(java.awt.event.ActionEvent evt) {
         		SelectionBoxChanged(evt);
-        		int selected_index = jComboBox1.getSelectedIndex();
-        		Object[][] finalTable = getFinalTable(csv.getModalByIndex(selected_index), selected_index);
-        		jTable1.setModel(new javax.swing.table.DefaultTableModel(
-        			finalTable,
-                    new String [] {
-                    		"Aluno", "NP1", "NP2", "Sub", "Exame", "Média", "Condição"
-                    }
-                ));
+        		reloadTable();
         	}
         });
 
-        int selected_index = jComboBox1.getSelectedIndex();
-		Object[][] finalTable = getFinalTable(csv.getModalByIndex(selected_index), selected_index);
-		jTable1.setModel(new javax.swing.table.DefaultTableModel(
-			finalTable,
-            new String [] {
-            		"Aluno", "NP1", "NP2", "Sub", "Exame", "Média", "Condição"
-            }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        reloadTable();
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -102,6 +97,7 @@ public class ListagemRendimento extends javax.swing.JFrame {
                 .addContainerGap(109, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(BtnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addComponent(BtnSair, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(28, 28, 28))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -120,8 +116,10 @@ public class ListagemRendimento extends javax.swing.JFrame {
                     .addComponent(jLabel1)
                     .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 225, Short.MAX_VALUE)
-                .addComponent(BtnSair, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGroup(layout.createParallelGroup()
+                		.addComponent(BtnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                		.addComponent(BtnSair, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                		.addGap(39)))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(119, 119, 119)
@@ -136,7 +134,28 @@ public class ListagemRendimento extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_BtnSairActionPerformed
     
+    private void BtnDeleteActionPerformed(java.awt.event.ActionEvent evt, int idx, int lst) {//GEN-FIRST:event_BtnSairActionPerformed
+    	try {
+    		csv.deleteRendimento(idx, lst);
+    		reloadTable();
+    	} catch (java.lang.ArrayIndexOutOfBoundsException e) {
+    		JOptionPane.showMessageDialog(null, "selecione um rendimento para deletá-lo");
+    	}
+    }//GEN-LAST:event_BtnSairActionPerformed
+    
     private void SelectionBoxChanged(java.awt.event.ActionEvent evt) {
+    }
+    
+    private void reloadTable() {
+    	int selected_index = jComboBox1.getSelectedIndex();
+		Object[][] finalTable = getFinalTable(csv.getModalByIndex(selected_index), selected_index);
+		jTable1.setModel(new javax.swing.table.DefaultTableModel(
+			finalTable,
+            new String [] {
+            		"Aluno", "NP1", "NP2", "Sub", "Exame", "Média", "Condição"
+            }
+        ));
+        jScrollPane1.setViewportView(jTable1);
     }
     
     private Object[][] getFinalTable(Object[][] input,int curso) {
@@ -230,5 +249,6 @@ public class ListagemRendimento extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
+    private javax.swing.JButton BtnDelete;
     // End of variables declaration//GEN-END:variables
 }

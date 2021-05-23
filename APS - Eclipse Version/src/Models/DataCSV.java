@@ -19,9 +19,9 @@ public class DataCSV {
 	public DataCSV(){
     	loadCSV();
     }
-	
-	/**
-	 * Carrega todos os Arquivos CSV do Projeto e os armazena nas listas privadas desde objeto
+	    
+    /**
+     * Carrega todos os Arquivos CSV do Projeto e os armazena nas listas privadas desde objeto
 	 */
 	private void loadCSV(){
 		if(csv_alunos.getDataframe(null)!=null) {
@@ -34,9 +34,8 @@ public class DataCSV {
 	    		this.CursosTable.add(i);
 	    	}
 	    	for(Object[] i : CursosTable) {
-	    		String nta = i[0].toString() + "_" + i[1].toString() + "_" + i[2].toString(); // nta = nome_tipo_ano
-	    		nta = nta.replace(" ", "");
-	    	    nta = ReadCSV.refineString(nta);
+	    		String nta = i[0].toString() + "_" + i[1].toString() + "_" + i[2].toString().replace(" ", ""); // nta = nome_tipo_ano
+	    		nta = ReadCSV.refineString(nta);
 	    	    this.csv_modal.add(new ReadCSV(nta + ".csv"));
 	    	}
 		}
@@ -178,6 +177,18 @@ public class DataCSV {
     }
     
     /**
+     * Verifica se existe algum curso cadastrado
+     * @return true se existe, caso o contrário false
+     */
+    public boolean modalExists() {
+    	if(this.ModalTable.size() < 1) {
+    		return false;
+    	} else {
+    		return true;
+    	}
+    }
+    
+    /**
      * Adiciona um novo curso a lista privada ou gera um erro caso impossível
      * @param name Nome do curso
      * @param tipo Tipo do curso
@@ -247,5 +258,68 @@ public class DataCSV {
     	}
     	
     	this.ModalTable.get(curso_index).add(new Object[] {ra, np1, np2, sub, exame});
+    }
+
+    /**
+     * Deleta um rendimento da base de dados
+     * @param curso_index index index do curso do rendimento
+     * @param list_index index do aluno do rendimento
+     */
+    public void deleteRendimento(int curso_index, int list_index) {
+    	this.ModalTable.get(curso_index).remove(list_index);
+    	this.saveAll();
+    }
+    
+    public void deleteHistorico(String nome_curso, int aluno_index) {
+    	int ra = Integer.valueOf(this.AlunosTable.get(aluno_index)[0].toString());
+    	for(int i = 0; i < this.getCursos().length; i++) {
+    		if(this.getCursos()[i] == nome_curso) {
+    			for(int k = 0; k < this.ModalTable.get(i).size(); k++) {
+    				int ra2 = Integer.valueOf(this.ModalTable.get(i).get(k)[0].toString());
+    				if(ra == ra2) {
+    					this.ModalTable.get(i).remove(k);
+    				}
+    			}
+    		}
+    	}
+    	this.saveAll();
+    }
+  
+    /**
+     * Deleta um curso e todos os rendimentos associados o ele da base de dados
+     * @param curso_index o index do curso na base de dados a ser deletado
+     * @return nome do curso deletado
+     */
+    public String deleteCurso(int curso_index) {
+    	final String name = this.getCursos()[curso_index];
+    	this.csv_modal.get(curso_index).deleteCSV();
+    	this.csv_modal.remove(curso_index);
+    	this.CursosTable.remove(curso_index);
+    	this.ModalTable.remove(curso_index);
+    	this.saveAll();
+    	return name;
+    }
+
+    /**
+     * Deleta um aluno e todas os rendimentos associados a ele na base de dados
+     * @param aluno_index index no aluno a ser removido
+     * @return nome do aluno
+     */
+    public String deleteAluno(int aluno_index) {
+    	String nome = this.getAlunos()[aluno_index];
+    	int ra = Integer.valueOf(this.getAlunosTable()[aluno_index][0].toString());
+    	if(this.modalExists()) {
+	    	for(int i = 0; i < this.ModalTable.size(); i++) {
+	    		for(int k = 0; k < this.ModalTable.get(i).size(); k++) {
+	    			int ra2 = Integer.valueOf(this.ModalTable.get(i).get(k)[0].toString());
+	    			if(ra2 == ra) {
+	    				this.ModalTable.get(i).remove(k);
+	    			}
+	    		}
+	    	}
+    	}
+    	this.AlunosTable.remove(aluno_index);
+    	this.saveAll();
+    	return nome;
     }
 }

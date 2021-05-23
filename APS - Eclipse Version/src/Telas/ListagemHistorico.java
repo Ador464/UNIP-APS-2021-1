@@ -8,6 +8,8 @@ package Telas;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import Models.DataCSV;
 import Models.ReadCSV;
 
@@ -43,6 +45,7 @@ public class ListagemHistorico extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         BtnSair = new javax.swing.JButton();
+        BtnDelete = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -56,14 +59,8 @@ public class ListagemHistorico extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Tahoma", 2, 36)); // NOI18N
         jLabel3.setText("Histórico");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-                new Object [][] {
-
-                },
-                new String [] {
-                    "Curso", "NP1", "NP2", "Sub", "Exame", "Média", "Condição"
-                }
-            ));
+        reloadTable();
+        
         jScrollPane1.setViewportView(jTable1);
 
         BtnSair.setText("Voltar");
@@ -73,28 +70,24 @@ public class ListagemHistorico extends javax.swing.JFrame {
             }
         });
         
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+        BtnDelete.setText("Excluir Rendimento");
+        BtnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            	BtnDeleteActionPerformed(evt, getFinalTable(csv.getModalTable(), jComboBox1.getSelectedIndex())[jTable1.getSelectedRow()][0].toString(), jComboBox1.getSelectedIndex());
+            }
+        });
+        
+        reloadTable();
+
+
+    	jComboBox1.addActionListener(new java.awt.event.ActionListener() {
         	public void actionPerformed(java.awt.event.ActionEvent evt) {
         		SelectionBoxChanged(evt);
-        		int selected_index = jComboBox1.getSelectedIndex();
-        		Object[][] finalTable = getFinalTable(csv.getModalTable(), selected_index);
-        		jTable1.setModel(new javax.swing.table.DefaultTableModel(
-        			finalTable,
-                    new String [] {
-                    		"Aluno", "NP1", "NP2", "Sub", "Exame", "Média", "Condição"
-                    }
-                ));
+        		reloadTable();
         	}
         });
-
-        int selected_index = jComboBox1.getSelectedIndex();
-		Object[][] finalTable = getFinalTable(csv.getModalTable(), selected_index);
-		jTable1.setModel(new javax.swing.table.DefaultTableModel(
-			finalTable,
-            new String [] {
-            		"Aluno", "NP1", "NP2", "Sub", "Exame", "Média", "Condição"
-            }
-        ));
+    	
+        
         jScrollPane1.setViewportView(jTable1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -102,10 +95,12 @@ public class ListagemHistorico extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+            	.addGap(5)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 518, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
+                    	.addComponent(BtnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(BtnSair, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(110, 110, 110)
@@ -131,8 +126,10 @@ public class ListagemHistorico extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
-                .addComponent(BtnSair, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGroup(layout.createParallelGroup()
+                	.addComponent(BtnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                	.addComponent(BtnSair, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(39)))
         );
 
         pack();
@@ -142,7 +139,27 @@ public class ListagemHistorico extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_BtnSairActionPerformed
     
+    private void BtnDeleteActionPerformed(java.awt.event.ActionEvent evt, String crs, int idx) {//GEN-FIRST:event_BtnSairActionPerformed
+    	try {
+    		csv.deleteHistorico(crs, idx);
+    		reloadTable();
+    	} catch (java.lang.ArrayIndexOutOfBoundsException e) {
+    		JOptionPane.showMessageDialog(null, "selecione um Histórico para deletá-lo");
+    	}
+    }//GEN-LAST:event_BtnSairActionPerformed
+    
     private void SelectionBoxChanged(java.awt.event.ActionEvent evt) {
+    }
+    
+    private void reloadTable() {
+    	int selected_index = jComboBox1.getSelectedIndex();
+		Object[][] finalTable = getFinalTable(csv.getModalTable(), selected_index);
+		jTable1.setModel(new javax.swing.table.DefaultTableModel(
+			finalTable,
+            new String [] {
+            		"Curso", "NP1", "NP2", "Sub", "Exame", "Média", "Condição"
+            }
+        ));
     }
     
     private Object[][] getFinalTable(Object[][][] modal,int index_aluno) {
@@ -250,5 +267,6 @@ public class ListagemHistorico extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
+    private javax.swing.JButton BtnDelete;
     // End of variables declaration//GEN-END:variables
 }
