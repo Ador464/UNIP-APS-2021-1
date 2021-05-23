@@ -198,6 +198,7 @@ public class ListagemRendimento extends javax.swing.JFrame {
     				res[i][6] = "Aprovado";
     			} else {
     				med = (med + exame) / 2;
+    				res[i][5] = med;
     				if(med >= 5) {
     					res[i][6] = "Aprovado";
     				} else {
